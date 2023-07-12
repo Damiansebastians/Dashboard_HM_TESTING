@@ -19,7 +19,6 @@ class Room {
     })
     return occupied;
 }
-
 //-----------------------------------------------
   occupancyPercentage(startDate, endDate) {
     let differenceDates = Math.abs(startDate.getTime() - endDate.getTime());
