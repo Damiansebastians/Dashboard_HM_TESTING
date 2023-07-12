@@ -10,16 +10,46 @@ class Room {
   //---------------------------------------
   isOccuppied(date) {
     let result = false;
-  
-      if (date >= this.booking.checkIn && 
-          date <= this.booking.checkOut) {
-        result = true;
-      } else {
-      result
+
+    if (date >= this.booking.checkIn && date <= this.booking.checkOut) {
+      result = true;
+    } else {
+      result;
     }
     return result;
   }
 
+//-----------------------------------------------
+  occupancyPercentage(startDate, endDate) {
+    let differenceDates = Math.abs(startDate.getTime() - endDate.getTime());
+    let percentage = 0;
+  
+    if (startDate.getTime() >= endDate.getTime()) {
+      return 0;
+    }
+  
+    this.booking.forEach((booking) => {
+      if (
+        booking.checkIn.getTime() >= startDate.getTime() &&
+        booking.checkOut.getTime() <= endDate.getTime()
+      ) {
+        percentage += Math.abs(
+          booking.checkIn.getTime() - booking.checkOut.getTime()
+        );
+      }
+    });
+  
+    if (percentage === 0) {
+      return 0;
+    } else {
+      return Number(((percentage * 100) / differenceDates).toFixed(0));
+    }
+  }
+  
+
+  static totalOccupancyPercentage(rooms, startDate, endDate) {}
+
+  static availableRooms(rooms, startDate, endDate) {}
 }
 class Booking {
   constructor(name, email, checkIn, checkOut, discount, room) {

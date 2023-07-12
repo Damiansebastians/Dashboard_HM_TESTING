@@ -10,15 +10,15 @@ const room1 = new Room(
 );
 
 describe("Room", () => {
-  test("El nombre es un string", () => {
+  test("The name is a string", () => {
     expect(typeof room1.name).toBe("string");
   });
 
-  test("El precio es un número entero", () => {
+  test("The price is a number", () => {
     expect(typeof room1.rate).toBe("number");
   });
 
-  test("Price se convierte a entero si se ingresan centavos", () => {
+  test("Convert to integer, input in cents.", () => {
     const room2 = new Room(
       "Maria Scott",
       [],
@@ -28,23 +28,45 @@ describe("Room", () => {
     expect(room2.rate).toBe(100);
   });
 
-  test("Fecha de ingreso al hotel es Nov 4th, 2020", () => {
-    const book1 = new Booking(
-      "user",
-      "user@user.com",
-      "Nov 4th, 2020"
-    );
-    expect(book1.checkIn).toBe("Nov 4th, 2020");
-  });
+  describe("Room occupancy percentage...", () => {
+    test('The start date is after or equal to the end date', () => {
+        const room3 = new Room("Suite", [], 8500, 15);
+        expect(room3.occupancyPercentage(new Date("11/14/2022"), new Date("11/12/2022"))).toBeFalsy();
+    })
 
+    test('Return 0% occupancy', () => {
+        const book01 = new Booking("User", "user@user.com", new Date("11/10/2022"), new Date("11/13/2022"), 5);
+        const book02 = new Booking("User", "user@user.com", new Date("11/16/2022"), new Date("11/19/2022"), 5);
+        const book03 = new Booking("user", "user@user.com", new Date("11/22/2022"), new Date("11/23/2022"), 5);
 
+        const room4 = new Room("Suite", [book01, book02, book03], 9500, 10);
+        expect(room4.occupancyPercentage(new Date("10/8/2022"), new Date("10/16/2022"))).toBe(0);
+    })
+
+    test('Return that is 100% occupied', () => {
+        const book01 = new Booking("user", "user@user.com", new Date("11/10/2022"), new Date("11/13/2022"), 15);
+        const book02 = new Booking("user", "user@user.com", new Date("11/16/2022"), new Date("11/19/2022"), 15);
+        const book03 = new Booking("user", "user@user.com", new Date("11/22/2022"), new Date("11/23/2022"), 15);
+
+        const room6 = new Room("Single", [book01, book02, book03], 5500, 0);
+        expect(room6.occupancyPercentage(new Date("11/10/2022"), new Date("11/13/2022"))).toBe(100);
+    })
+})
 });
 
 //---------------------------------------------------
+test("Checkin is Nov 4th, 2020", () => {
+  const book1 = new Booking(
+    "user",
+    "user@user.com",
+    "Nov 4th, 2020"
+  );
+  expect(book1.checkIn).toBe("Nov 4th, 2020");
+});
 
-describe("¿La habitación está ocupada?", () => {
+describe("The room occupied?", () => {
 
-  test("Ocupada", () => {
+  test("Occupied", () => {
     const book = new Booking(
       "user",
       "user@user.com",
@@ -63,7 +85,7 @@ describe("¿La habitación está ocupada?", () => {
   });
 
 //--------------------------------------------------
-  test("No ocupada", () => {
+  test("Not occupied", () => {
     const book = new Booking(
       "user",
       "user@user.com",
@@ -77,12 +99,12 @@ describe("¿La habitación está ocupada?", () => {
       5
     );
 
-    expect(occupiedRoom.isOccuppied("2023-01-01")).toBeFalsy();
+    expect(occupiedRoom.isOccuppied("2023-07-01")).toBeFalsy();
   });
 });
 
 //-------------------------------------------------
-test("getFee, 10% descuento", () => {
+test("getFee, 10% discount", () => {
   const room1 = new Room(
     "single", 
     [], 
@@ -104,7 +126,7 @@ test("getFee, 10% descuento", () => {
 });
 
 //--------------------------------------------------
-test("getFee, 20% descuento", () => {
+test("getFee, 20% discount", () => {
   const room1 = new Room("suite", [], 300, 15);
   const book1 = new Booking(
     "user",
@@ -121,7 +143,7 @@ test("getFee, 20% descuento", () => {
 
 //---------------------------------------------------
 describe('Booking', () => {
-  test(' Discount se aplica correctamente al calcular el precio total', () => {
+  test("The discount is applied correctly when calculating the total price", () => {
     const room = new Room( 
       'Deluxe Room', 
       [], 
