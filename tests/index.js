@@ -8,16 +8,17 @@ class Room {
   }
 
   //---------------------------------------
-  isOccuppied(date) {
-    let result = false;
+  isOccupied(date) {
+    let occupied = false
 
-    if (date >= this.booking.checkIn && date <= this.booking.checkOut) {
-      result = true;
-    } else {
-      result;
-    }
-    return result;
-  }
+    this.booking.forEach(booking => {
+        if (date >= booking.checkIn && 
+            date <= booking.checkOut) {
+            occupied = true;
+        }
+    })
+    return occupied;
+}
 
 //-----------------------------------------------
   occupancyPercentage(startDate, endDate) {
