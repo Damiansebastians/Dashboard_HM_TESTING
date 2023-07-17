@@ -92,13 +92,9 @@ describe('Room occupancy?', () => {
 
 
 //-------------------------------------------------
-test("getFee, 10% discount", () => {
+test("getFee, 5% discount room + 5% discount booking", () => {
   const room1 = new Room(
-    "single", 
-    [], 
-    250, 
-    5
-  );
+    "single", [], 500, 5);
 
   const book1 = new Booking(
     "user",
@@ -110,23 +106,87 @@ test("getFee, 10% discount", () => {
   );
 
   room1.bookings = [book1];
-  expect(book1.getFee()).toBe(225);
+  expect(book1.getFee()).toBe(451);
 });
 
 //--------------------------------------------------
-test("getFee, 20% discount", () => {
-  const room1 = new Room("suite", [], 300, 15);
+test("getFee, 10% discount room + 10% discount booking", () => {
+  const room1 = new Room("suite", [], 300, 10);
   const book1 = new Booking(
     "user",
     "user@user.com",
     new Date("2023-07-07"),
     new Date("2023-07-15"),
-    5,
+    10,
     room1
   );
 
   room1.bookings = [book1];
-  expect(book1.getFee()).toBe(240);
+  expect(book1.getFee()).toBe(243);
+});
+
+//--------------------------------------------------
+test("getFee, 10% discount room + 0% discount booking", () => {
+  const room1 = new Room("suite", [], 1000, 10);
+  const book1 = new Booking(
+    "user",
+    "user@user.com",
+    new Date("2023-07-07"),
+    new Date("2023-07-15"),
+    0,
+    room1
+  );
+
+  room1.bookings = [book1];
+  expect(book1.getFee()).toBe(900);
+});
+
+//--------------------------------------------------
+test("getFee, 0% discount room + 20% discount booking", () => {
+  const room1 = new Room("suite", [], 100, 0);
+  const book1 = new Booking(
+    "user",
+    "user@user.com",
+    new Date("2023-07-07"),
+    new Date("2023-07-15"),
+    20,
+    room1
+  );
+
+  room1.bookings = [book1];
+  expect(book1.getFee()).toBe(80);
+});
+
+//--------------------------------------------------
+test("getFee, 0% discount room + 0% discount booking", () => {
+  const room1 = new Room("suite", [], 200, 0);
+  const book1 = new Booking(
+    "user",
+    "user@user.com",
+    new Date("2023-07-07"),
+    new Date("2023-07-15"),
+    0,
+    room1
+  );
+
+  room1.bookings = [book1];
+  expect(book1.getFee()).toBe(200);
+});
+
+//--------------------------------------------------
+test("getFee, 100% discount room + 10% discount booking", () => {
+  const room1 = new Room("suite", [], 400, 100);
+  const book1 = new Booking(
+    "user",
+    "user@user.com",
+    new Date("2023-07-07"),
+    new Date("2023-07-15"),
+    10,
+    room1
+  );
+
+  room1.bookings = [book1];
+  expect(book1.getFee()).toBe(0);
 });
 
 //---------------------------------------------------
@@ -135,8 +195,8 @@ describe('Booking', () => {
     const room = new Room( 
       'Deluxe Room', 
       [], 
-      200, 
-      5
+      100, 
+      10
     );
 
     const book = new Booking(
@@ -144,10 +204,10 @@ describe('Booking', () => {
       'user@user.com', 
       new Date("2023-07-01"), 
       new Date("2023-07-05"), 
-      5, 
+      10, 
       room
     );
 
-    expect(book.getFee()).toBe(180);
+    expect(book.getFee()).toBe(81);
   });
 });
