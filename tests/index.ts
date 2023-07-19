@@ -127,8 +127,8 @@ class Booking {
   }
 
   //----------------------------------------
-  getFee(): number {
-    let priceTotal: number = this.room.rate;
+  getFee() {
+    let priceTotal = this.room.rate;
     const discountRoom: number = this.room.discount;
     const discountBooking: number = this.discount; 
   
